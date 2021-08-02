@@ -2,25 +2,23 @@ import cv2 as cv
 import numpy as np
 import math
 
+
 def embed_get_files():
-	print('Enter host image name with extension: ', end = '')
-	host_image_name = input()
+	host_image_name = input('Enter host image  with extension: ')
 	host_image = cv.imread(host_image_name)
 	#host_image = cv.imread('zelda512.png')
 
-	print('Enter secret image name with extension: ', end = '')
-	secret_image_name = input()
+	secret_image_name = input('Enter secret image  with extension: ')
 	secret_image = cv.imread(secret_image_name)
 	#secret_image = cv.imread('lena256.png')
 
-	print('Enter output image name: ', end = '')
-	output_image_name = input()
+	output_image_name = input('Enter output image  without extension: ')
 	#output_image_name = 'stegano.png'
 
 	output_image_name_check, output_image_extension = output_image_name.split('.')
-	if output_image_name_check == 'jpeg' or output_image_name_check == 'jpg':
-		output_image_name = output_image_name + '.png'
-		print('Output file name changed to: ', output_image_name)
+	if output_image_extension == 'jpeg' or output_image_extension == 'jpg':
+		output_image_name = output_image_name_check + '.png'
+		print('Output file  changed to: ', output_image_name)
 
 	# Check how many MSB's of secret image can be embedded given host images size
 	hostrows,   hostcols,   hostchannels   = host_image.shape
@@ -36,29 +34,21 @@ def embed_get_files():
 
 	return host_image, secret_image, output_image_name, max_msb
 
+
 def extract_get_files():
-	print('Enter steganography image name with extension: ', end = '')
-	steg_image = cv.imread( input() )
+	steg_image = cv.imread( input('Enter steganography image  with extension: ') )
 	#steg_image = cv.imread('stegano.png')
 
-	print('Enter output image name: ', end = '')
-	output_image_name = input()
+	output_image_name = input('Enter output image : ')
 	#output_image_name = 'extracted.png'
 
 	output_image_name_check, output_image_extension = output_image_name.split('.')
-	if output_image_name_check == 'jpeg' or output_image_name_check == 'jpg':
-		output_image_name = output_image_name + '.png'
-		print('Output file name changed to: ', output_image_name)
+	if output_image_extension == 'jpeg' or output_image_extension == 'jpg':
+		output_image_name = output_image_name_check + '.png'
+		print('Output file  changed to: ', output_image_name)
 
 	return steg_image, output_image_name
 
-def PSNR(original, compressed):
-    mse = np.mean((original - compressed) ** 2)
-    if(mse == 0):
-        return 100
-    max_pixel = 255.0
-    psnr = 20 * math.log10(max_pixel / math.sqrt(mse))
-    return psnr
 
 def embed(host_image, secret_image, max_msb):
 	hostrows,   hostcols,   hostchannels   = host_image.shape
@@ -75,16 +65,16 @@ def embed(host_image, secret_image, max_msb):
 	curr_host_row = 0
 	curr_host_col = 0
 
-	for row in range(0, secretrows):
-		for col in range(0, secretcols):
+	for row in range(secretrows):
+		for col in range(secretcols):
 			r, g, b = secret_image[col, row]
 			binval = '{0:08b}'.format(r)
-			bin_MSBs = binval[0: max_msb: 1]
+			bin_MSBs = binval[0: max_msb: 1]  # TODO: remove :1
 
 			for bit in bin_MSBs:
 				hr, hb, hg = host_image[curr_host_col, curr_host_row]
 				hostbinval = '{0:08b}'.format(hr)
-				newbin = hostbinval[0: 7: 1] + bit
+				newbin = hostbinval[0: 7: 1] + bit  # TODO: remove :1
 				new = int(newbin, 2)
 				
 				host_image[curr_host_col, curr_host_row] = (new, new, new)
@@ -95,6 +85,7 @@ def embed(host_image, secret_image, max_msb):
 					curr_host_row += 1
 
 	return host_image
+
 
 def extract(steg_image):
 	max_msb = 4
@@ -112,8 +103,8 @@ def extract(steg_image):
 	traveled_pixel_count = 0
 	LSBs_buffer = ''
 
-	for row in range(0, stegrows):
-		for col in range(0, stegcols):
+	for row in range(stegrows):
+		for col in range(stegcols):
 			sr, sb, sg = steg_image[col, row]
 			binval = '{0:08b}'.format(sr)
 			lsb = binval[7]
@@ -122,7 +113,7 @@ def extract(steg_image):
 
 			if traveled_pixel_count % max_msb == 0:
 				padding_size = 8 - max_msb
-				for i in range(0, padding_size):
+				for i in range(padding_size):
 					LSBs_buffer += '0'
 
 				dec_pixel_val = int(LSBs_buffer, 2)
@@ -137,23 +128,22 @@ def extract(steg_image):
 
 	return new_img_layer
 
+
 def main():
-	print('1 - Embed\n2 - Extract\nPlease enter mode: ', end = '')
-	mode = input()
+	mode = input('1 - Embed\n2 - Extract\nPlease enter mode: ')
 
 	while (mode != '1' and mode != '2'):
-		print('Undefined input! Plase try again: ', end = '')
-		mode = input()
+		mode = input('Undefined input! Plase try again: ')
 
 	if (mode == '1'):
 		host_image, secret_image, output_image_name, max_msb = embed_get_files()
 		embedded_image = embed(host_image, secret_image, max_msb)
 		cv.imwrite(output_image_name, embedded_image)
-		print('PSNR: ', PSNR(host_image, embedded_image))
 
 	if (mode == '2'):
 		steg_image, output_image_name = extract_get_files()
 		cv.imwrite(output_image_name, extract(steg_image))
+
 
 if __name__ == '__main__':
 	main()
