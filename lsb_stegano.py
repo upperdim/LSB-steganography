@@ -15,10 +15,10 @@ def embed_get_files():
 	output_image_name = input('Enter output image  without extension: ') + '.png'
 	#output_image_name = 'stegano.png'
 
-	output_image_name_check, output_image_extension = output_image_name.split('.')
-	if output_image_extension == 'jpeg' or output_image_extension == 'jpg':
-		output_image_name = output_image_name_check + '.png'
-		print('Output file  changed to: ', output_image_name)
+	# output_image_name_check, output_image_extension = output_image_name.split('.')
+	# if output_image_extension == 'jpeg' or output_image_extension == 'jpg':
+	# 	output_image_name = output_image_name_check + '.png'
+	# 	print('Output file  changed to: ', output_image_name)
 
 	# Check how many MSB's of secret image can be embedded given host images size
 	hostrows,   hostcols,   hostchannels   = host_image.shape
@@ -42,10 +42,10 @@ def extract_get_files():
 	output_image_name = input('Enter output image : ') + '.png'
 	#output_image_name = 'extracted.png'
 
-	output_image_name_check, output_image_extension = output_image_name.split('.')
-	if output_image_extension == 'jpeg' or output_image_extension == 'jpg':
-		output_image_name = output_image_name_check + '.png'
-		print('Output file  changed to: ', output_image_name)
+	# output_image_name_check, output_image_extension = output_image_name.split('.')
+	# if output_image_extension == 'jpeg' or output_image_extension == 'jpg':
+	# 	output_image_name = output_image_name_check + '.png'
+	# 	print('Output file  changed to: ', output_image_name)
 
 	return steg_image, output_image_name
 
