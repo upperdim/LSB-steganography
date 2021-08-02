@@ -69,12 +69,12 @@ def embed(host_image, secret_image, max_msb):
 		for col in range(secretcols):
 			r, g, b = secret_image[col, row]
 			binval = '{0:08b}'.format(r)
-			bin_MSBs = binval[0: max_msb: 1]  # TODO: remove :1
+			bin_MSBs = binval[0: max_msb]
 
 			for bit in bin_MSBs:
 				hr, hb, hg = host_image[curr_host_col, curr_host_row]
 				hostbinval = '{0:08b}'.format(hr)
-				newbin = hostbinval[0: 7: 1] + bit  # TODO: remove :1
+				newbin = hostbinval[0: 7] + bit
 				new = int(newbin, 2)
 				
 				host_image[curr_host_col, curr_host_row] = (new, new, new)
