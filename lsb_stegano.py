@@ -12,7 +12,7 @@ def embed_get_files():
 	secret_image = cv.imread(secret_image_name)
 	#secret_image = cv.imread('lena256.png')
 
-	output_image_name = input('Enter output image  without extension: ')
+	output_image_name = input('Enter output image  without extension: ') + '.png'
 	#output_image_name = 'stegano.png'
 
 	output_image_name_check, output_image_extension = output_image_name.split('.')
@@ -39,7 +39,7 @@ def extract_get_files():
 	steg_image = cv.imread( input('Enter steganography image  with extension: ') )
 	#steg_image = cv.imread('stegano.png')
 
-	output_image_name = input('Enter output image : ')
+	output_image_name = input('Enter output image : ') + '.png'
 	#output_image_name = 'extracted.png'
 
 	output_image_name_check, output_image_extension = output_image_name.split('.')
