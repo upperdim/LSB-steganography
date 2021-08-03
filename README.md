@@ -4,8 +4,6 @@ LSB Image Steganography
 Embeds secret images into a host image and extracts those images back. It may reduce the quality of the secret images when their original size does not fit into the host image.
 
 # Results
-
-## Host Image
 ![Host Image: Zelda (512x512)](/examples/host_zelda512.png "Host Image: Zelda (512x512)")
 <br>
 Host Image: Zelda (512x512)
