@@ -1,5 +1,5 @@
 # LSB-Steganography
-LSB Image Steganography
+Least significant bit image steganography
 
 Embeds secret images into a host image and extracts those images back. It may reduce the quality of the secret images when their original size do not fit into the host image.
 
